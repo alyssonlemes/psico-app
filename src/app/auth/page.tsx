@@ -83,7 +83,7 @@ export default function AuthPage() {
     // }
   };
   const handleRegister = async () => {
-    if (senha !== confirmSenha) throw new Error("Passwords do not match.");
+    if (senha !== confirmSenha) throw new Error("As senhas não coincidem.");
     let endpoint: string;
     let payload: PatientRegisterPayload | PsychologistRegisterPayload;
     if (userType === "patient") {
@@ -94,7 +94,7 @@ export default function AuthPage() {
       payload = { name, email, senha, cpf, telefone, crp };
     }
     await api.post<RegisterResponse, typeof payload>(endpoint, payload);
-    alert("Registration successful! Please log in.");
+    alert("Cadastro realizado com sucesso! Faça o login.");
     setAuthMode("login");
     clearForm();
   };
@@ -107,7 +107,7 @@ export default function AuthPage() {
       else await handleRegister();
     } catch (err: any) {
       setError(
-        err.message || `An error occurred during ${authMode}. Please try again.`
+        err.message || `Ocorreu um erro durante o ${authMode === "login" ? "login" : "cadastro"}. Tente novamente.`
       );
     } finally {
       setLoading(false);
@@ -122,7 +122,7 @@ export default function AuthPage() {
       <div className="hidden lg:flex w-1/2 h-screen relative bg-blue-50">
         <Image
           src="/auth-image.png"
-          alt="Authentication Illustration"
+          alt="Ilustração de Autenticação"
           fill
           className="object-cover"
           priority
@@ -133,68 +133,140 @@ export default function AuthPage() {
       <div className="flex w-full lg:w-1/2 items-center justify-center p-8 sm:p-12">
         <div className="w-full max-w-sm">
           <h1 className="mb-6 text-left text-3xl font-bold text-gray-900">
-            {authMode === "login" ? "Login" : "Register"}
+            {authMode === "login" ? "Entrar" : "Cadastrar"}
           </h1>
 
           {/* User Type Selection (Register only - Minimal Style) */}
           {authMode === "register" && (
             <div className="mb-6">
-              <p className="block text-sm font-medium text-gray-700 mb-2">
-                Registering as:
+              <p className="block text-sm font-medium text-gray-700 mb-3">
+                Cadastro como:
               </p>
-              <div className="flex space-x-4">
-                {/* Simple Radio Buttons */}
-                <label className="flex items-center space-x-2 cursor-pointer">
+              <div className="grid grid-cols-2 gap-3">
+                {/* Patient Option */}
+                <label className="relative cursor-pointer">
                   <input
                     type="radio"
                     name="userType"
                     value="patient"
                     checked={userType === "patient"}
                     onChange={() => setUserType("patient")}
-                    className="form-radio h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                    className="sr-only"
                     disabled={loading}
                   />
-                  <span
-                    className={`text-sm ${
-                      userType === "patient"
-                        ? "text-gray-900 font-medium"
-                        : "text-gray-600"
-                    }`}
+                  <div
+                    className={`
+                      flex flex-col items-center justify-center p-3 rounded-lg border-2 transition-all duration-200
+                      ${
+                        userType === "patient"
+                          ? "border-blue-500 bg-blue-50 text-blue-700"
+                          : "border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:bg-gray-50"
+                      }
+                      ${loading ? "opacity-50 cursor-not-allowed" : ""}
+                    `}
                   >
-                    Patient
-                  </span>
+                    {/* Patient Icon */}
+                    <svg
+                      className={`w-5 h-5 mb-1.5 ${
+                        userType === "patient" ? "text-blue-600" : "text-gray-400"
+                      }`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                      />
+                    </svg>
+                    <span className="text-xs font-medium">Paciente</span>
+                    {userType === "patient" && (
+                      <div className="absolute top-1.5 right-1.5">
+                        <svg
+                          className="w-3.5 h-3.5 text-blue-600"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
                 </label>
-                <label className="flex items-center space-x-2 cursor-pointer">
+
+                {/* Psychologist Option */}
+                <label className="relative cursor-pointer">
                   <input
                     type="radio"
                     name="userType"
                     value="psychologist"
                     checked={userType === "psychologist"}
                     onChange={() => setUserType("psychologist")}
-                    className="form-radio h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                    className="sr-only"
                     disabled={loading}
                   />
-                  <span
-                    className={`text-sm ${
-                      userType === "psychologist"
-                        ? "text-gray-900 font-medium"
-                        : "text-gray-600"
-                    }`}
+                  <div
+                    className={`
+                      flex flex-col items-center justify-center p-3 rounded-lg border-2 transition-all duration-200
+                      ${
+                        userType === "psychologist"
+                          ? "border-blue-500 bg-blue-50 text-blue-700"
+                          : "border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:bg-gray-50"
+                      }
+                      ${loading ? "opacity-50 cursor-not-allowed" : ""}
+                    `}
                   >
-                    Psychologist
-                  </span>
+                    {/* Psychologist Icon */}
+                    <svg
+                      className={`w-5 h-5 mb-1.5 ${
+                        userType === "psychologist" ? "text-blue-600" : "text-gray-400"
+                      }`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                      />
+                    </svg>
+                    <span className="text-xs font-medium">Psicólogo</span>
+                    {userType === "psychologist" && (
+                      <div className="absolute top-1.5 right-1.5">
+                        <svg
+                          className="w-3.5 h-3.5 text-blue-600"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
                 </label>
               </div>
             </div>
           )}
 
           {/* --- Auth Form (Cleaned Inputs/Button based on new image) --- */}
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className={`${authMode === "register" ? "space-y-3" : "space-y-5"}`}>
             {/* Registration Fields */}
             {authMode === "register" && (
               <>
                 <CleanInput
-                  label="Full Name"
+                  label="Nome Completo"
                   type="text"
                   id="name"
                   value={name}
@@ -212,7 +284,7 @@ export default function AuthPage() {
                   disabled={loading}
                 />
                 <CleanInput
-                  label="Phone"
+                  label="Telefone"
                   type="tel"
                   id="telefone"
                   value={telefone}
@@ -222,7 +294,7 @@ export default function AuthPage() {
                 />
                 {userType === "patient" && (
                   <CleanInput
-                    label="Date of Birth"
+                    label="Data de Nascimento"
                     type="date"
                     id="dataNascimento"
                     value={dataNascimento}
@@ -247,7 +319,7 @@ export default function AuthPage() {
 
             {/* Common Fields */}
             <CleanInput
-              label="Email"
+              label="E-mail"
               type="email"
               id="email"
               value={email}
@@ -256,7 +328,7 @@ export default function AuthPage() {
               disabled={loading}
             />
             <CleanInput
-              label="Password"
+              label="Senha"
               type="password"
               id="senha"
               value={senha}
@@ -268,7 +340,7 @@ export default function AuthPage() {
             {/* Confirm Password (Register only) */}
             {authMode === "register" && (
               <CleanInput
-                label="Confirm Password"
+                label="Confirmar Senha"
                 type="password"
                 id="confirmSenha"
                 value={confirmSenha}
@@ -283,8 +355,8 @@ export default function AuthPage() {
               <p className="text-xs text-red-600 text-center pt-1">{error}</p>
             )}
 
-            {/* Submit Button (Cleaned Style based on new image) */}
-            <div className="pt-2">
+            {/* Submit Button (Reduced margin for registration) */}
+            <div className={`${authMode === "register" ? "pt-1" : "pt-2"}`}>
               <button
                 type="submit"
                 className={`w-full rounded-md px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 ${
@@ -293,28 +365,29 @@ export default function AuthPage() {
                 disabled={loading}
               >
                 {loading
-                  ? "Processing..."
+                  ? "Processando..."
                   : authMode === "login"
-                  ? "Login"
-                  : "Register"}
+                  ? "Entrar"
+                  : "Cadastrar"}
               </button>
             </div>
           </form>
           {/* ------------------------------------------------------------- */}
 
-          {/* Toggle Auth Mode (Cleaned Style based on new image) */}
-          <p className="mt-6 text-center text-sm text-gray-600">
+          {/* Toggle Auth Mode (Reduced margin for registration) */}
+          <p className={`text-center text-sm text-gray-600 ${authMode === "register" ? "mt-3" : "mt-6"}`}>
             {authMode === "login"
-              ? "Don't have an account?"
-              : "Already have an account?"}{" "}
+              ? "Não tem uma conta?"
+              : "Já tem uma conta?"}{" "}
             <button
               onClick={toggleAuthMode}
               className="font-medium text-blue-600 hover:underline focus:outline-none"
               disabled={loading}
             >
-              {authMode === "login" ? "Register" : "Login"}
+              {authMode === "login" ? "Cadastrar" : "Entrar"}
             </button>
           </p>
+          {/* ------------------------------------------------------------- */}
         </div>
       </div>
     </div>
