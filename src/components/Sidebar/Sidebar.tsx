@@ -95,7 +95,7 @@ export default function Sidebar() {
     setUser({
       id: '1',
       name: 'João Psicólogo',
-      role: 'Psicologo', // Troque para 'Paciente' para testar como paciente
+      role: 'Paciente', // Troque para 'Paciente' para testar como paciente
     });
 
     // Exemplo de fetch real:

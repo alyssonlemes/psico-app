@@ -34,7 +34,7 @@ import {
 } from "lucide-react";
 
 // Dados mockados - MUDANÇA AQUI: Altere o tipo para testar
-const mockUser = { tipo: "psicologo", nome: "Dr. João Silva" }; // Mudei para psicologo
+const mockUser = { tipo: "paciente", nome: "Dr. João Silva" }; // Mudei para psicologo
 
 const mockConsultas = [
   { name: "Jan", consultas: 2 },
