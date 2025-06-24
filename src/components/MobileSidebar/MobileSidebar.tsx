@@ -76,9 +76,17 @@ const allMenuItems = [
   },
 ];
 
-const supportItems = [
-  { name: 'Chat', href: '/support/chat', icon: <MessageCircle size={18} /> },
-  { name: 'Email', href: '/support/email', icon: <Mail size={18} /> },
+const supportInfo = [
+  { 
+    value: '(16) 99999-9999', 
+    icon: <MessageCircle size={18} />,
+    href: 'https://wa.me/5516999999999'
+  },
+  { 
+    value: 'suporte@psicoapp.com.br', 
+    icon: <Mail size={18} />,
+    href: 'mailto:suporte@psicoapp.com.br'
+  },
 ];
 
 export default function MobileSidebar() {
@@ -163,20 +171,26 @@ export default function MobileSidebar() {
 
         <div className="mt-8">
           <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wide px-2 mb-2">Suporte</h2>
-          <ul className="space-y-1">
-            {supportItems.map((item) => (
-              <li key={item.name}>
-                <Link
+          <div className="space-y-3">
+            {supportInfo.map((item, index) => (
+              <div key={index} className="px-3 py-2">
+                <a
                   href={item.href}
-                  className="flex items-center gap-3 px-3 py-2 rounded-md text-sm text-black hover:bg-gray-100 transition-colors"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 text-sm hover:text-blue-600 transition-colors cursor-pointer group"
                   onClick={() => setOpen(false)}
                 >
-                  {item.icon}
-                  {item.name}
-                </Link>
-              </li>
+                  <span className="text-gray-600 group-hover:text-blue-600 transition-colors">
+                    {item.icon}
+                  </span>
+                  <div className="text-gray-700 group-hover:text-blue-600 transition-colors">
+                    {item.value}
+                  </div>
+                </a>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       </aside>
     </>
